@@ -1,0 +1,63 @@
+on post-fs
+#INTERNAL_START
+#
+# Connectivity related modules and character device nodes (Begin)
+#
+    #for 662x_launcher
+    chmod 0660 /dev/ttyMT2
+    chown system system /dev/ttyMT2
+
+#add begin
+on post-fs-data
+#autok
+chown root system /sys/autok/debug
+chown root system /sys/autok/param_count
+chown root system /sys/autok/ready
+chown root system /sys/autok/ss_corner
+chown root system /sys/autok/suggest_vol
+chown root system /sys/autok/stage1/2/DONE
+chown root system /sys/autok/stage1/2/PARAMS
+chown root system /sys/autok/stage1/2/VOLTAGE
+chown root system /sys/autok/stage1/2/LOG
+chown root system /sys/autok/stage2/2
+#add end
+
+#
+# Connectivity related modules and character device nodes (Ends)
+#
+
+    chmod 0660 /dev/spm
+    chown system system /dev/spm
+
+on boot
+
+#
+# Connectivity related services (Begin)
+#
+
+service wmtLoader /system/bin/wmt_loader
+    user root
+    group root
+    oneshot
+    
+service 66xx_launcher /system/bin/6620_launcher -m 4 -p /system/etc/firmware/
+    user system
+    group system
+
+#
+# Connectivity related services (End)
+#
+
+service spm_script /system/bin/spm_loader
+    user root
+    group root
+    oneshot
+
+# For WiFi High Speed calibration
+service autokd /system/bin/autokd
+class core
+user system
+group system
+
+
+#INTERNAL_END
